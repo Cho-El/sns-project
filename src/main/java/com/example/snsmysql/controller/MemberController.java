@@ -1,10 +1,9 @@
-package com.example.fastcampusmysql.controller;
+package com.example.snsmysql.controller;
 
-import com.example.fastcampusmysql.domain.member.dto.MemberDto;
-import com.example.fastcampusmysql.domain.member.dto.RegisterMemberCommand;
-import com.example.fastcampusmysql.domain.member.entity.Member;
-import com.example.fastcampusmysql.domain.member.service.MemberReadService;
-import com.example.fastcampusmysql.domain.member.service.MemberWriteService;
+import com.example.snsmysql.domain.member.dto.MemberDto;
+import com.example.snsmysql.domain.member.dto.RegisterMemberCommand;
+import com.example.snsmysql.domain.member.service.MemberReadService;
+import com.example.snsmysql.domain.member.service.MemberWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

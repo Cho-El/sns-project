@@ -1,4 +1,4 @@
-package com.example.fastcampusmysql.domain.member.dto;
+package com.example.snsmysql.domain.member.dto;
 
 import java.time.LocalDate;
 
