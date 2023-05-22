@@ -1,4 +1,4 @@
-package com.example.snsmysql.controller;
+package com.example.snsmysql.application.controller;
 
 import com.example.snsmysql.domain.member.dto.MemberDto;
 import com.example.snsmysql.domain.member.dto.MemberNicknameHistoryDto;
