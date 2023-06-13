@@ -1,13 +1,19 @@
 package com.example.snsmysql.domain.post.repository;
 
+import com.example.snsmysql.domain.post.dto.DailyPostCount;
+import com.example.snsmysql.domain.post.dto.DailyPostCountRequest;
 import com.example.snsmysql.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -15,6 +21,24 @@ import java.util.Objects;
 public class PostRepository {
     static final String TABLE = "Post";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    private static final RowMapper<DailyPostCount> DAILY_POST_COUNT_MAPPER = (ResultSet resultSet, int rowNum) -> new DailyPostCount(
+            resultSet.getLong("memberId"),
+            resultSet.getObject("createdDate", LocalDate.class),
+            resultSet.getLong("count")
+    );
+
+    public List<DailyPostCount> groupByCreatedDate(DailyPostCountRequest request) {
+        var sql = String.format(
+                    """
+                    SELECT createdDate, memberId, COUNT(id) as count
+                    FROM %s
+                    WHERE memberId = :memberId and createdDate between :firstDate and :lastDate
+                    GROUP BY memberId, createdDate
+                    """, TABLE);
+        var params = new BeanPropertySqlParameterSource(request);
+        return namedParameterJdbcTemplate.query(sql, params, DAILY_POST_COUNT_MAPPER);
+    }
 
     public Post save(Post post) {
         if (post.getId() == null)

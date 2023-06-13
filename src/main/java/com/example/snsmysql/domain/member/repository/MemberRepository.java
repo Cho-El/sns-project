@@ -60,8 +60,7 @@ public class MemberRepository {
     private Member insert(Member member) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(namedParameterJdbcTemplate.getJdbcTemplate())
                 .withTableName(TABLE)
-                .usingGeneratedKeyColumns("id");
-
+                .usingGeneratedKeyColumns("id"); // Key 생성
         SqlParameterSource params = new BeanPropertySqlParameterSource(member);
         var id = jdbcInsert.executeAndReturnKey(params).longValue();
 

@@ -23,7 +23,7 @@ import java.util.Optional;
 public class MemberNicknameHistoryRepository {
     static final String TABLE = "MemberNicknameHistory";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
+    // 쿼리문으로 반환해줄 형태 RowMapper
     private static final RowMapper<MemberNicknameHistory> ROW_MAPPER = (ResultSet resultSet, int rowNum) -> MemberNicknameHistory.builder()
             .id(resultSet.getLong("id"))
             .memberId(resultSet.getLong("memberId"))
@@ -32,9 +32,9 @@ public class MemberNicknameHistoryRepository {
             .build();
 
     public List<MemberNicknameHistory> findAllByMemberId(Long memberId) {
-        var sql = String.format("SELECT * FROM %s WHERE memberId = :memberId", TABLE);
-        var params = new MapSqlParameterSource().addValue("memberId", memberId);
-        return namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
+        var sql = String.format("SELECT * FROM %s WHERE memberId = :memberId", TABLE); // SQL문
+        var params = new MapSqlParameterSource().addValue("memberId", memberId); // SQL문 안 파라미터 값 넣어주기
+        return namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER); // 쿼리 실행
     }
     public MemberNicknameHistory save(MemberNicknameHistory history) {
         if (history.getId() == null)
