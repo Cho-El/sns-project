@@ -56,7 +56,7 @@ public class PostRepository {
         var params = new MapSqlParameterSource()
                 .addValue("memberId", memberId)
                 .addValue("size",pageable.getPageSize())
-                .addValue("offset", pageable.getOffset())
+                .addValue("offset", pageable.getOffset());
         var sql = String.format("""
                 SELECT *
                 FROM %s
