@@ -7,9 +7,9 @@ import com.example.snsmysql.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class PostReadService {
         return postRepository.groupByCreatedDate(request);
     }
 
-    public Page<Post> getPosts(Long memberId, PageRequest pageRequest) {
+    public Page<Post> getPosts(Long memberId, Pageable pageRequest) {
         return postRepository.findAllByMemberId(memberId, pageRequest);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.snsmysql.domain.post.repository;
 
+import com.example.snsmysql.domain.PageHelper;
 import com.example.snsmysql.domain.post.dto.DailyPostCount;
 import com.example.snsmysql.domain.post.dto.DailyPostCountRequest;
 import com.example.snsmysql.domain.post.entity.Post;
@@ -61,9 +62,11 @@ public class PostRepository {
                 SELECT *
                 FROM %s
                 WHERE memberId = :memberId
+                ORDER BY %s
                 LIMIT :size
                 OFFSET :offset
-                """, TABLE);
+                """, TABLE, PageHelper.orderBy(pageable.getSort()));
+
         var posts = namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
         return new PageImpl(posts, pageable, getCount(memberId));
     }
