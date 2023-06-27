@@ -1,5 +1,7 @@
 package com.example.snsmysql.application.controller;
 
+import com.example.snsmysql.domain.post.CursorRequest;
+import com.example.snsmysql.domain.post.PageCursor;
 import com.example.snsmysql.domain.post.dto.DailyPostCount;
 import com.example.snsmysql.domain.post.dto.DailyPostCountRequest;
 import com.example.snsmysql.domain.post.dto.PostCommand;
@@ -36,5 +38,13 @@ public class PostController {
             Pageable pageable
             ) {
         return postReadService.getPosts(memberId, pageable);
+    }
+
+    @GetMapping("/members/{memberId}/by-cursor")
+    public PageCursor<Post> getPostsByCursor(
+            @PathVariable Long memberId,
+            CursorRequest cursorRequest
+    ) {
+        return postReadService.getPosts(memberId, cursorRequest);
     }
 }
