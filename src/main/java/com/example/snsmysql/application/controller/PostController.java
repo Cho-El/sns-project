@@ -1,5 +1,6 @@
 package com.example.snsmysql.application.controller;
 
+import com.example.snsmysql.application.usecase.GetTimeLinePostsUsecase;
 import com.example.snsmysql.domain.post.CursorRequest;
 import com.example.snsmysql.domain.post.PageCursor;
 import com.example.snsmysql.domain.post.dto.DailyPostCount;
@@ -22,6 +23,8 @@ import java.util.List;
 public class PostController {
     private final PostWriteService postWriteService;
     private final PostReadService postReadService;
+    private  final GetTimeLinePostsUsecase getTimeLinePostsUsecase;
+
     @PostMapping("")
     public Long create(PostCommand command) {
         return postWriteService.create(command);
@@ -46,5 +49,13 @@ public class PostController {
             CursorRequest cursorRequest
     ) {
         return postReadService.getPosts(memberId, cursorRequest);
+    }
+
+    @GetMapping("/member/{memberId}/timeline")
+    public PageCursor<Post> getTimeline(
+            @PathVariable Long memberId,
+            CursorRequest cursorRequest
+    ) {
+        return getTimeLinePostsUsecase.execute(memberId, cursorRequest);
     }
 }
