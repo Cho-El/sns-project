@@ -7,7 +7,6 @@ import com.example.snsmysql.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -109,6 +108,20 @@ public class PostRepository {
         var params = new MapSqlParameterSource()
                 .addValue("memberIds", memberIds)
                 .addValue("size", size);
+        return namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
+    }
+
+    public List<Post> findAllByInId(List<Long> ids) {
+        if (ids.isEmpty())
+            return List.of();
+
+        var sql = String.format("""
+                SELECT *
+                FROM %s
+                WHERE id in (:ids)
+                """, TABLE);
+        var params = new MapSqlParameterSource()
+                .addValue("ids", ids);
         return namedParameterJdbcTemplate.query(sql, params, ROW_MAPPER);
     }
 
