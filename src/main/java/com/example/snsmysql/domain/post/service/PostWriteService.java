@@ -30,4 +30,12 @@ public class PostWriteService {
         post.incrementLikeCount();
         postRepository.save(post);
     }
+    public void likePostByOptimisticLock(Long postId) {
+        /*
+            낙관적 락을 통한 동시성 이슈 해결
+         */
+        var post = postRepository.findById(postId, false).orElseThrow();
+        post.incrementLikeCount();
+        postRepository.save(post);
+    }
 }
