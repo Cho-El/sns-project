@@ -19,12 +19,21 @@ public class Post {
     private final LocalDate createdDate;
     private final LocalDateTime createdAt;
 
+    private Long likeCount;
+
+    private Long version;
     @Builder
-    public Post(Long id, Long memberId, String contents, LocalDate createdDate, LocalDateTime createdAt) {
+    public Post(Long id, Long memberId, String contents, LocalDate createdDate, LocalDateTime createdAt, Long likeCount, Long version) {
         this.id = id;
         this.memberId = memberId;
         this.contents = contents;
         this.createdDate = createdDate == null ? LocalDate.now() : createdDate;
         this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
+        this.version = version == null ? 0 : version;
+        this.likeCount = likeCount == null ? 0 : likeCount;
+    }
+
+    public void incrementLikeCount() {
+        this.likeCount += 1;
     }
 }
