@@ -4,7 +4,9 @@ import com.example.snsmysql.domain.post.CursorRequest;
 import com.example.snsmysql.domain.post.PageCursor;
 import com.example.snsmysql.domain.post.dto.DailyPostCount;
 import com.example.snsmysql.domain.post.dto.DailyPostCountRequest;
+import com.example.snsmysql.domain.post.dto.PostDto;
 import com.example.snsmysql.domain.post.entity.Post;
+import com.example.snsmysql.domain.post.repository.PostLikeRepository;
 import com.example.snsmysql.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,13 +21,28 @@ import java.util.List;
 @Service
 public class PostReadService {
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     public List<DailyPostCount> getDailyPostCount(DailyPostCountRequest request) {
         return postRepository.groupByCreatedDate(request);
     }
 
-    public Page<Post> getPosts(Long memberId, Pageable pageRequest) {
-        return postRepository.findAllByMemberId(memberId, pageRequest);
+    public Page<PostDto> getPosts(Long memberId, Pageable pageRequest) {
+        return postRepository.findAllByMemberId(memberId, pageRequest).map(this::countLike);
+    }
+
+    private PostDto countLike(Post post) {
+        var likeCount = postLikeRepository.count(post.getId());
+        return toDto(post, likeCount);
+    }
+
+    private PostDto toDto(Post post, Long countLike) {
+        return new PostDto(
+                post.getId(),
+                post.getContents(),
+                post.getCreatedAt(),
+                countLike
+        );
     }
 
     public PageCursor<Post> getPosts(Long memberId, CursorRequest cursorRequest) {
@@ -40,6 +57,10 @@ public class PostReadService {
         var posts = findAllBy(memberIds, cursorRequest);
         var nextKey = getNextKey(posts);
         return new PageCursor<>(cursorRequest.next(nextKey), posts);
+    }
+
+    public Post getPost(Long postId) {
+        return postRepository.findById(postId, false).orElseThrow();
     }
 
     private static long getNextKey(List<Post> posts) {

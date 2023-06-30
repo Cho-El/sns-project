@@ -21,7 +21,8 @@ public class Post {
 
     private Long likeCount;
 
-    private Long version;
+    private final Long version;
+
     @Builder
     public Post(Long id, Long memberId, String contents, LocalDate createdDate, LocalDateTime createdAt, Long likeCount, Long version) {
         this.id = id;

@@ -33,6 +33,7 @@ public class PostWriteService {
     public void likePostByOptimisticLock(Long postId) {
         /*
             낙관적 락을 통한 동시성 이슈 해결
+            데이터 삽입시 version이
          */
         var post = postRepository.findById(postId, false).orElseThrow();
         post.incrementLikeCount();
